@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const HF_API_KEY = process.env.LLM_API_KEY;
-const LLM_MODEL = "meta-llama/Llama-3.1-8B-Instruct";
+const LLM_MODEL = "meta-llama/Llama-3.1-8B-Instruct:cerebras";
 const MAX_CHUNK_CHARS = 400;
 
 export async function getLLMResponse({ systemPrompt, userPrompt, contextChunks = [], chatHistory = [] }) {
@@ -33,7 +33,7 @@ export async function getLLMResponse({ systemPrompt, userPrompt, contextChunks =
     ];
 
     const response = await fetch(
-      "https://router.huggingface.co/hf-inference/v1/chat/completions",
+      "https://router.huggingface.co/v1/chat/completions",
       {
         method: "POST",
         headers: {
