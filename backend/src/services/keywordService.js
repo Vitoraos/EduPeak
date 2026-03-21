@@ -1,27 +1,63 @@
 // backend/src/services/keywordService.js
 import dotenv from "dotenv";
 dotenv.config();
+
 const HF_API_KEY = process.env.LLM_API_KEY;
-const LLM_MODEL = "meta-llama/Llama-3.1-8B-Instruct";
+const LLM_MODEL = "meta-llama/Llama-3.1-8B-Instruct:cerebras";
+
 export async function extractKeywords(userPrompt, subject) {
   try {
     const messages = [
-      { role: "system", content: "You are a JAMB exam keyword extractor. Return ONLY a valid JSON array of 4-7 specific " + subject + " keywords. No explanation, no markdown. Format: [\"kw1\", \"kw2\"]" },
-      { role: "user", content: "Student question: \"" + userPrompt + "\"\nSubject: " + subject + "\nReturn JSON array only." }
+      {
+        role: "system",
+        content: `You are a JAMB exam keyword extractor.
+Your job is to extract the most relevant technical keywords from a student question that would appear in JAMB ${subject} past questions.
+
+Rules:
+- Return ONLY a valid JSON array of strings. No explanation, no markdown, no extra text.
+- Extract between 4 and 7 keywords maximum.
+- Keywords must be specific ${subject} terms likely found in JAMB past questions.
+- Do not include generic words like explain, what, how, is, the, a, an.
+- Output must be exactly this format: ["keyword1", "keyword2", "keyword3"]`
+      },
+      {
+        role: "user",
+        content: `Student question: "${userPrompt}"\nSubject: ${subject}\n\nReturn the JAMB ${subject} keywords as a JSON array only.`
+      }
     ];
+
     const response = await fetch(
-      `https://router.huggingface.co/hf-inference/models/${LLM_MODEL}/v1/chat/completions`,
-      { method: "POST", headers: { Authorization: `Bearer ${HF_API_KEY}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ model: LLM_MODEL, messages, max_tokens: 80, temperature: 0.1, top_p: 0.9 }) }
+      "https://router.huggingface.co/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${HF_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: LLM_MODEL,
+          messages,
+          max_tokens: 80,
+          temperature: 0.1,
+          top_p: 0.9,
+        }),
+      }
     );
-    if (!response.ok) { const e = await response.text(); throw new Error(`HF error ${response.status}: ${e}`); }
+
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new Error(`HF LLM API error ${response.status}: ${errText}`);
+    }
+
     const res = await response.json();
     const raw = res?.choices?.[0]?.message?.content?.trim() || "[]";
     const cleaned = raw.replace(/```json/gi, "").replace(/```/g, "").trim();
     const keywords = JSON.parse(cleaned);
-    if (!Array.isArray(keywords) || keywords.length === 0) throw new Error("Invalid format");
-    console.log("Keywords [" + subject + "] " + JSON.stringify(keywords));
+
+    if (!Array.isArray(keywords) || keywords.length === 0) throw new Error("Invalid keyword format");
+    console.log(`Keywords [${subject}]`, keywords);
     return keywords;
+
   } catch (err) {
     console.error("Keyword extraction failed:", err?.message || err);
     const fallback = userPrompt.toLowerCase().replace(/[^a-z0-9\s]/g,"").split(" ")
