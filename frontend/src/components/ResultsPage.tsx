@@ -1,4 +1,4 @@
- """\
+
 import { useState } from "react";
 import { Quiz } from "../types";
 import { CheckCircle2, XCircle, RotateCcw, Plus, ChevronDown, ChevronUp } from "lucide-react";
@@ -119,4 +119,4 @@ export default function ResultsPage({ quiz, answers, score, onRetake, onNewQuiz 
     </div>
   );
 }
-"""
+
