@@ -74,7 +74,7 @@ export default function QuizPage({ quiz, onComplete, onBack }: Props) {
         <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "var(--surface-2)" }}>
           <div
             className="h-full rounded-full transition-all duration-500"
-            style={{ width: \`\${progress}%\`, background: "var(--accent)" }}
+            style={{ width: `${progress}%`, background: "var(--accent)" }}
           />
         </div>
         <span className="text-xs tabular-nums" style={{ color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>
@@ -96,7 +96,7 @@ export default function QuizPage({ quiz, onComplete, onBack }: Props) {
         <div className="flex items-center gap-2">
           <span
             className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-medium"
-            style={{ fontFamily: "var(--font-mono)", color: difficultyColor[question.difficulty], background: \`\${difficultyColor[question.difficulty]}18\` }}
+            style={{ fontFamily: "var(--font-mono)", color: difficultyColor[question.difficulty], background: `${difficultyColor[question.difficulty]}18` }}
           >
             <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ background: difficultyColor[question.difficulty] }} />
             {question.difficulty}
