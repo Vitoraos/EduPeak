@@ -1,4 +1,4 @@
-"""\
+
 import { useState } from "react";
 import { Quiz, Question } from "../types";
 import { ArrowLeft, ArrowRight, CheckCircle } from "lucide-react";
@@ -187,4 +187,4 @@ export default function QuizPage({ quiz, onComplete, onBack }: Props) {
     </div>
   );
 }
-"""
+
