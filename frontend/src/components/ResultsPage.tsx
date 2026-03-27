@@ -27,7 +27,7 @@ export default function ResultsPage({ quiz, answers, score, onRetake, onNewQuiz 
       <div className="text-center mb-14 animate-fade-up">
         <div
           className="inline-flex items-center justify-center w-28 h-28 rounded-full border-4 mb-6"
-          style={{ borderColor: scoreColor, background: \`\${scoreColor}12\`, animation: "pulse-ring 2s ease-in-out infinite" }}
+          style={{ borderColor: scoreColor, background: `${scoreColor}12`, animation: "pulse-ring 2s ease-in-out infinite" }}
         >
           <span className="text-3xl font-extrabold" style={{ color: scoreColor, fontFamily: "var(--font-display)" }}>
             {score}%
