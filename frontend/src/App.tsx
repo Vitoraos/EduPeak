@@ -1,4 +1,4 @@
-"""\
+
 import { useState } from "react";
 import { Quiz } from "./types";
 import UploadPage from "./components/UploadPage";
@@ -59,4 +59,5 @@ export default function App() {
     </div>
   );
 }
-"""
+
+
