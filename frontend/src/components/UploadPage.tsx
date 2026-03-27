@@ -1,4 +1,4 @@
-"""\
+
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { Upload, FileText, Sparkles, AlertCircle, X } from "lucide-react";
@@ -182,4 +182,4 @@ export default function UploadPage({ onQuizReady }: Props) {
     </div>
   );
 }
-"""
+
